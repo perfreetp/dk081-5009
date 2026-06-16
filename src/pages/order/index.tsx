@@ -1,15 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import { useAppStore } from '@/store';
 import PartTypeTag from '@/components/PartTypeTag';
 import styles from './index.module.scss';
 
-type OrderTab = 'all' | 'pending_pay' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
+type OrderTab = 'all' | 'pending_pay' | 'pending_confirm' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
 
 const statusMap: Record<string, { label: string; className: string }> = {
   pending_pay: { label: '待付订金', className: 'statusPendingPay' },
+  pending_confirm: { label: '备货中', className: 'statusPendingShip' },
   pending_ship: { label: '待发货', className: 'statusPendingShip' },
   pending_receive: { label: '待收货', className: 'statusPendingReceive' },
   pending_install: { label: '待安装', className: 'statusPendingReceive' },
@@ -20,6 +21,7 @@ const statusMap: Record<string, { label: string; className: string }> = {
 const tabs: { key: OrderTab; label: string }[] = [
   { key: 'all', label: '全部' },
   { key: 'pending_pay', label: '待付款' },
+  { key: 'pending_confirm', label: '备货中' },
   { key: 'pending_ship', label: '待发货' },
   { key: 'pending_receive', label: '待收货' },
   { key: 'pending_install', label: '待安装' },
@@ -28,8 +30,10 @@ const tabs: { key: OrderTab; label: string }[] = [
 ];
 
 const OrderPage = () => {
-  const [tab, setTab] = useState<OrderTab>('all');
-  const { orders } = useAppStore();
+  const router = useRouter();
+  const initialStatus = router.params.status as OrderTab | undefined;
+  const [tab, setTab] = useState<OrderTab>(initialStatus || 'all');
+  const { orders, getDisputeByOrderId } = useAppStore();
 
   const filteredOrders = useMemo(() => {
     if (tab === 'all') return orders;
@@ -48,7 +52,12 @@ const OrderPage = () => {
 
   const handleDispute = (id: string) => {
     console.info('[Order] view dispute', id);
-    Taro.navigateTo({ url: `/pages/dispute/index?orderId=${id}` });
+    const dispute = getDisputeByOrderId(id);
+    if (dispute) {
+      Taro.navigateTo({ url: `/pages/dispute/index?orderId=${id}&disputeId=${dispute.id}` });
+    } else {
+      Taro.navigateTo({ url: `/pages/dispute/index?orderId=${id}` });
+    }
   };
 
   return (

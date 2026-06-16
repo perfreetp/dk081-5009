@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Image, Textarea } from '@tarojs/components';
+import { View, Text, Image, Textarea, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import { useAppStore } from '@/store';
 import { mockParts } from '@/data/parts';
+import { mockMerchants } from '@/data/merchants';
 import type { OrderItem } from '@/types';
 import styles from './index.module.scss';
 
@@ -16,38 +17,54 @@ const questionTypeList = [
   { value: 'other' as const, label: '其他问题' },
 ];
 
-const disputeTimeline = [
-  { key: 'submit', title: '提交申请', desc: '您的维权申请已提交' },
-  { key: 'review', title: '平台审核', desc: '平台正在核实您提交的信息' },
-  { key: 'process', title: '协调处理', desc: '平台正在协调商家与您沟通解决方案' },
-  { key: 'complete', title: '处理完成', desc: '维权申请已处理完成' },
-];
+const disputeStatusMap = {
+  pending: { label: '待处理', className: 'statusPending' },
+  reviewing: { label: '审核中', className: 'statusReviewing' },
+  processing: { label: '处理中', className: 'statusProcessing' },
+  resolved: { label: '已解决', className: 'statusResolved' },
+  rejected: { label: '已驳回', className: 'statusRejected' },
+};
 
 const DisputePage = () => {
   const router = useRouter();
   const orderId = router.params.orderId as string;
-  const { orders, updateOrder, addDispute } = useAppStore();
+  const disputeIdParam = router.params.disputeId as string | undefined;
+  const { orders, updateOrder, addDispute, getDisputeByOrderId, getDisputeById } = useAppStore();
 
   const [questionType, setQuestionType] = useState<QuestionType>('mismatch');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [disputeId, setDisputeId] = useState<string>('');
-  const [createdAt, setCreatedAt] = useState<string>('');
 
   const order = useMemo((): OrderItem | undefined => {
     return orders.find(o => o.id === orderId);
   }, [orderId, orders]);
+
+  const merchant = useMemo(() => {
+    if (!order) return null;
+    return mockMerchants.find(m => m.id === order.merchantId) || null;
+  }, [order]);
 
   const part = useMemo(() => {
     if (!order) return null;
     return mockParts.find(p => p.commonName === order.partName) || mockParts[0];
   }, [order]);
 
+  const existingDispute = useMemo(() => {
+    if (disputeIdParam) {
+      return getDisputeById(disputeIdParam);
+    }
+    if (order) {
+      return getDisputeByOrderId(order.id);
+    }
+    return null;
+  }, [order, disputeIdParam, getDisputeById, getDisputeByOrderId]);
+
+  const isViewMode = !!existingDispute;
+
   const canSubmit = useMemo(() => {
-    return description.trim().length >= 10 && !submitted;
-  }, [description, submitted]);
+    return description.trim().length >= 10 && !isViewMode;
+  }, [description, isViewMode]);
 
   const handleChooseImage = () => {
     console.info('[Dispute] choose image');
@@ -68,17 +85,20 @@ const DisputePage = () => {
     console.info('[Dispute] submit dispute:', { questionType, description, images });
 
     const id = `DIS${Date.now()}`;
-    setDisputeId(id);
-    setCreatedAt(new Date().toLocaleString('zh-CN'));
 
     addDispute({
       id,
       orderId: order.id,
+      merchantId: order.merchantId,
       questionType,
       description,
       images,
       status: 'pending',
       createdAt: new Date().toLocaleString('zh-CN'),
+      progressNotes: [
+        { time: new Date().toLocaleString('zh-CN'), operator: '用户', content: '提交维权申请' },
+        { time: new Date().toLocaleString('zh-CN'), operator: '系统', content: '已受理，平台客服将在1-3个工作日内处理' },
+      ],
     });
 
     updateOrder(order.id, {
@@ -86,7 +106,6 @@ const DisputePage = () => {
       disputeId: id,
     });
 
-    setSubmitted(true);
     setShowSuccess(true);
 
     setTimeout(() => {
@@ -96,6 +115,20 @@ const DisputePage = () => {
 
   const handleBack = () => {
     Taro.navigateBack({ delta: 1 });
+  };
+
+  const handleGoOrder = () => {
+    if (order) {
+      Taro.redirectTo({ url: `/pages/order-detail/index?id=${order.id}` });
+    } else {
+      handleBack();
+    }
+  };
+
+  const handleGoMerchant = () => {
+    if (merchant) {
+      Taro.navigateTo({ url: `/pages/merchant-detail/index?id=${merchant.id}` });
+    }
   };
 
   if (!order) {
@@ -108,12 +141,16 @@ const DisputePage = () => {
     );
   }
 
-  const currentStep = submitted ? 1 : -1;
+  const currentQuestionType = isViewMode ? existingDispute!.questionType : questionType;
+  const currentDescription = isViewMode ? existingDispute!.description : description;
+  const currentImages = isViewMode ? existingDispute!.images : images;
+  const currentStatus = isViewMode ? existingDispute!.status : 'pending';
+  const statusInfo = disputeStatusMap[currentStatus];
 
   return (
     <View className={styles.page}>
       <View className={styles.orderCard}>
-        <View className={styles.orderHeader}>
+        <View className={styles.orderHeader} onClick={handleGoOrder}>
           <Image
             className={styles.partImage}
             src={part?.imageUrl || 'https://picsum.photos/seed/car-part/200'}
@@ -122,13 +159,31 @@ const DisputePage = () => {
           <View className={styles.orderInfo}>
             <Text className={styles.partName}>{order.partName}</Text>
             <Text className={styles.orderNo}>订单号：{order.id}</Text>
-            <Text className={styles.orderNo}>商家：{order.merchantName}</Text>
+            <View className={styles.merchantRow} onClick={(e) => { e.stopPropagation(); handleGoMerchant(); }}>
+              <Text className={styles.merchantText}>商家：{order.merchantName}</Text>
+              <Text className={styles.merchantArrow}>›</Text>
+            </View>
           </View>
+          <Text className={styles.orderArrow}>›</Text>
         </View>
+
+        {isViewMode && (
+          <View className={styles.disputeHeader}>
+            <View className={styles.disputeHeaderLeft}>
+              <Text className={classnames(styles.statusBadge, styles[statusInfo.className])}>
+                {statusInfo.label}
+              </Text>
+              <View>
+                <Text className={styles.disputeIdText}>维权编号：{existingDispute!.id}</Text>
+                <Text className={styles.disputeTimeText}>提交时间：{existingDispute!.createdAt}</Text>
+              </View>
+            </View>
+          </View>
+        )}
       </View>
 
-      {!submitted ? (
-        <>
+      {!isViewMode ? (
+        <ScrollView scrollY style={{ height: 'calc(100vh - 420rpx)' }}>
           <View className={styles.formSection}>
             <Text className={styles.sectionTitle}>申请平台介入</Text>
 
@@ -163,7 +218,7 @@ const DisputePage = () => {
 
             <Text className={styles.formLabel} style={{ marginTop: 40 }}>上传凭证（最多3张）</Text>
             <View className={styles.imageUploader}>
-              {images.map((img, idx) => (
+              {currentImages.map((img, idx) => (
                 <View key={idx} className={styles.uploadItem}>
                   <Image
                     className={styles.uploadedImage}
@@ -173,7 +228,7 @@ const DisputePage = () => {
                   />
                 </View>
               ))}
-              {images.length < 3 && (
+              {currentImages.length < 3 && (
                 <View className={styles.uploadItem} onClick={handleChooseImage}>
                   <Text className={styles.uploadIcon}>📷</Text>
                   <Text className={styles.uploadText}>点击上传</Text>
@@ -201,38 +256,89 @@ const DisputePage = () => {
               <Text>如需紧急处理，请联系客服电话：400-888-8888</Text>
             </View>
           </View>
-        </>
+        </ScrollView>
       ) : (
-        <View className={styles.progressSection}>
-          <Text className={styles.statusBadge}>处理中</Text>
-          <Text className={styles.sectionTitle}>维权申请进度</Text>
-          <Text className={styles.formLabel}>维权编号：{disputeId}</Text>
-          <Text className={styles.formLabel}>提交时间：{createdAt}</Text>
-          <Text className={styles.formLabel}>问题类型：{questionTypeList.find(t => t.value === questionType)?.label}</Text>
+        <ScrollView scrollY style={{ height: 'calc(100vh - 420rpx)' }}>
+          <View className={styles.progressSection}>
+            <Text className={styles.sectionTitle}>维权详情</Text>
 
-          <View className={styles.timeline}>
-            {disputeTimeline.map((item, idx) => {
-              const active = idx <= currentStep;
-              return (
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>问题类型</Text>
+              <Text className={styles.detailValue}>
+                {questionTypeList.find(t => t.value === currentQuestionType)?.label}
+              </Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>问题描述</Text>
+              <Text className={classnames(styles.detailValue, styles.detailMulti)}>
+                {currentDescription}
+              </Text>
+            </View>
+            {currentImages && currentImages.length > 0 && (
+              <View className={styles.detailRow}>
+                <Text className={styles.detailLabel}>凭证图片</Text>
+                <View className={styles.evidenceImages}>
+                  {currentImages.map((img, idx) => (
+                    <Image
+                      key={idx}
+                      className={styles.evidenceImage}
+                      src={img}
+                      mode="aspectFill"
+                    />
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {existingDispute!.result && (
+              <View className={styles.detailRow}>
+                <Text className={styles.detailLabel}>处理结果</Text>
+                <Text className={classnames(styles.detailValue, styles.detailResult)}>
+                  {existingDispute!.result}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View className={styles.progressSection}>
+            <Text className={styles.sectionTitle}>处理进度</Text>
+            <View className={styles.timeline}>
+              {existingDispute!.progressNotes && existingDispute!.progressNotes.map((note, idx) => (
                 <View
-                  key={item.key}
-                  className={classnames(styles.timelineItem, active && styles.active)}
+                  key={idx}
+                  className={classnames(
+                    styles.timelineItem,
+                    idx === 0 && styles.timelineActive
+                  )}
                 >
                   <View className={styles.timelineDot} />
                   <View className={styles.timelineContent}>
-                    <Text className={styles.timelineTitle}>{item.title}</Text>
-                    <Text className={styles.timelineDesc}>{item.desc}</Text>
-                    {active && (
-                      <Text className={styles.timelineTime}>
-                        {idx === 0 ? createdAt : '预计1-3个工作日'}
-                      </Text>
-                    )}
+                    <Text className={styles.timelineTitle}>{note.operator}</Text>
+                    <Text className={styles.timelineDesc}>{note.content}</Text>
+                    <Text className={styles.timelineTime}>{note.time}</Text>
                   </View>
                 </View>
-              );
-            })}
+              ))}
+              {(!existingDispute!.progressNotes || existingDispute!.progressNotes.length === 0) && (
+                <View className={styles.emptyTimeline}>
+                  <Text className={styles.emptyText}>暂无处理进度</Text>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
+
+          <View className={styles.contactSection}>
+            <Text className={styles.contactTitle}>📞 客服联系方式</Text>
+            <View className={styles.contactItem}>
+              <Text className={styles.contactLabel}>客服电话</Text>
+              <Text className={styles.contactValue}>400-888-8888</Text>
+            </View>
+            <View className={styles.contactItem}>
+              <Text className={styles.contactLabel}>服务时间</Text>
+              <Text className={styles.contactValue}>周一至周日 09:00-21:00</Text>
+            </View>
+          </View>
+        </ScrollView>
       )}
 
       <View className={styles.footer}>
@@ -240,15 +346,23 @@ const DisputePage = () => {
           className={classnames(styles.footerBtn, styles.btnSecondary)}
           onClick={handleBack}
         >
-          <Text>{submitted ? '返回订单' : '取消'}</Text>
+          <Text>返回</Text>
         </View>
-        {!submitted && (
+        {!isViewMode && (
           <View
             className={classnames(styles.footerBtn, styles.btnPrimary)}
             onClick={handleSubmit}
             disabled={!canSubmit}
           >
             <Text>提交申请</Text>
+          </View>
+        )}
+        {isViewMode && (
+          <View
+            className={classnames(styles.footerBtn, styles.btnPrimary)}
+            onClick={handleGoOrder}
+          >
+            <Text>查看订单</Text>
           </View>
         )}
       </View>

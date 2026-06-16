@@ -118,6 +118,63 @@
   border-radius: $radius-xs;
 }
 
+.merchantRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.merchantRow .merchantAvatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  flex-shrink: 0;
+}
+
+.merchantRow .merchantInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.merchantRow .merchantName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.merchantRow .merchantMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.merchantRow .merchantArrow {
+  font-size: 40rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.trackingRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  justify-content: flex-end;
+}
+
+.trackingRow .infoValue {
+  flex: none;
+  margin-left: 0;
+}
+
+.copyText {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
 .orderInfoSection {
   margin-top: $spacing-sm;
   padding-top: $spacing-sm;
@@ -521,4 +578,131 @@
   color: $color-text-secondary;
   text-align: center;
   margin-top: $spacing-sm;
+}
+
+.sectionIcon {
+  margin-right: 8rpx;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionHeaderRow .sectionTitle {
+  margin-bottom: 0;
+}
+
+.logisticsMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.logisticsSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.logisticsTimeline {
+  position: relative;
+}
+
+.logisticsItem {
+  position: relative;
+  padding: 12rpx 0 24rpx 40rpx;
+  border-left: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+}
+
+.logisticsItem .logisticsDot {
+  position: absolute;
+  left: -7rpx;
+  top: 18rpx;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+}
+
+.logisticsItem.logisticsLatest .logisticsDot {
+  background: $color-primary;
+  box-shadow: 0 0 0 6rpx rgba(26, 109, 255, 0.2);
+}
+
+.logisticsContent {
+  padding-bottom: 8rpx;
+}
+
+.logisticsStatus {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.logisticsLatest .logisticsStatus {
+  color: $color-primary;
+}
+
+.logisticsDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 6rpx;
+  line-height: $line-height-normal;
+}
+
+.logisticsTime {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin-top: 6rpx;
+}
+
+.disputeBanner {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, #FFF7E6 0%, #FFF2E8 100%);
+  border: 2rpx solid #FFD591;
+  border-radius: $radius-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.disputeBannerLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.disputeBannerIcon {
+  font-size: 40rpx;
+}
+
+.disputeBannerTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  display: block;
+}
+
+.disputeBannerDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.disputeBannerArrow {
+  font-size: $font-size-sm;
+  color: $color-warning;
+  flex-shrink: 0;
 }

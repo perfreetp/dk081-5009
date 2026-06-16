@@ -43,6 +43,17 @@ export interface Merchant {
   recycleSource?: string;
   certDescription?: string;
   deliveryMethods: ('self_pickup' | 'local_delivery' | 'national_shipping')[];
+  parts?: MerchantPart[];
+}
+
+export interface MerchantPart {
+  id: string;
+  name: string;
+  commonName: string;
+  partType: 'used' | 'remanufactured' | 'aftermarket';
+  price: number;
+  warranty: string;
+  imageUrl: string;
 }
 
 export interface QuoteItem {
@@ -75,33 +86,56 @@ export interface QuoteSession {
   createdAt: string;
 }
 
+export interface LogisticsNode {
+  status: string;
+  time: string;
+  description: string;
+}
+
 export interface OrderItem {
   id: string;
   partName: string;
   partType: 'used' | 'remanufactured' | 'aftermarket';
+  merchantId: string;
   merchantName: string;
+  merchantAvatar?: string;
   price: number;
   deposit: number;
-  status: 'pending_pay' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
+  status: 'pending_pay' | 'pending_confirm' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
   createdAt: string;
   installDate?: string;
   payAt?: string;
   payMethod?: string;
+  confirmAt?: string;
   shipAt?: string;
+  trackingNo?: string;
+  logisticsCompany?: string;
+  logisticsNodes?: LogisticsNode[];
   receiveAt?: string;
   completeAt?: string;
   disputeId?: string;
+  quoteId?: string;
+  sessionId?: string;
   isLocal: boolean;
 }
 
 export interface DisputeItem {
   id: string;
   orderId: string;
+  merchantId?: string;
   questionType: 'mismatch' | 'quality' | 'shipping' | 'other';
   description: string;
   images: string[];
   status: 'pending' | 'reviewing' | 'processing' | 'resolved' | 'rejected';
   createdAt: string;
+  progressNotes?: DisputeProgressNote[];
+  result?: string;
+}
+
+export interface DisputeProgressNote {
+  time: string;
+  operator: string;
+  content: string;
 }
 
 export interface HotCategory {

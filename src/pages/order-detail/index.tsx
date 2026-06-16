@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import { useAppStore } from '@/store';
 import { mockParts } from '@/data/parts';
+import { mockMerchants } from '@/data/merchants';
 import PartTypeTag from '@/components/PartTypeTag';
 import type { OrderItem } from '@/types';
 import styles from './index.module.scss';
@@ -14,7 +15,8 @@ type ModalType = 'pay' | 'install' | 'success' | null;
 
 const statusMap = {
   pending_pay: { title: '待支付订金', desc: '请在30分钟内完成支付，超时订单将自动取消' },
-  pending_ship: { title: '备货中', desc: '商家正在备货，请耐心等待发货' },
+  pending_confirm: { title: '商家备货中', desc: '您已支付订金，商家正在确认并准备配件' },
+  pending_ship: { title: '待发货', desc: '商家已确认订单，正在准备配件即将发货' },
   pending_receive: { title: '待收货', desc: '配件正在配送中，请注意查收' },
   pending_install: { title: '待安装', desc: '已签收，请尽快预约安装' },
   completed: { title: '已完成', desc: '订单已完成，感谢您的使用' },
@@ -23,6 +25,7 @@ const statusMap = {
 
 const timelineTemplate = [
   { key: 'pay', title: '支付订金', desc: '订单已创建，等待您支付订金' },
+  { key: 'confirm', title: '商家确认', desc: '商家已确认订单，正在准备配件' },
   { key: 'ship', title: '商家发货', desc: '商家已发货，配件正在途中' },
   { key: 'receive', title: '确认收货', desc: '您已签收配件，请检查配件完整性' },
   { key: 'install', title: '预约安装', desc: '已预约安装时间，请按时到店' },
@@ -32,7 +35,7 @@ const timelineTemplate = [
 const OrderDetailPage = () => {
   const router = useRouter();
   const orderId = router.params.id as string;
-  const { orders, updateOrder } = useAppStore();
+  const { orders, updateOrder, getDisputeByOrderId } = useAppStore();
 
   const [modalType, setModalType] = useState<ModalType>(null);
   const [payMethod, setPayMethod] = useState<PayMethod>('wechat');
@@ -43,10 +46,20 @@ const OrderDetailPage = () => {
     return orders.find(o => o.id === orderId);
   }, [orderId, orders]);
 
+  const merchant = useMemo(() => {
+    if (!order) return null;
+    return mockMerchants.find(m => m.id === order.merchantId) || null;
+  }, [order]);
+
   const part = useMemo(() => {
     if (!order) return null;
     return mockParts.find(p => p.commonName === order.partName) || mockParts[0];
   }, [order]);
+
+  const existingDispute = useMemo(() => {
+    if (!order) return null;
+    return getDisputeByOrderId(order.id);
+  }, [order, getDisputeByOrderId]);
 
   const statusInfo = order ? statusMap[order.status] : statusMap.pending_pay;
 
@@ -78,17 +91,40 @@ const OrderDetailPage = () => {
   const timeline = useMemo(() => {
     if (!order) return timelineTemplate.map(t => ({ ...t, active: false, time: '' }));
 
-    const statusOrder: Array<keyof typeof statusMap> = ['pending_pay', 'pending_ship', 'pending_receive', 'pending_install', 'completed', 'dispute'];
+    const statusOrder: Array<keyof typeof statusMap> = [
+      'pending_pay', 'pending_confirm', 'pending_ship', 'pending_receive',
+      'pending_install', 'completed', 'dispute'
+    ];
     const currentIdx = statusOrder.indexOf(order.status);
 
     return timelineTemplate.map((item, idx) => {
-      const active = idx <= currentIdx;
+      let active = false;
       let time = '';
-      if (item.key === 'install') {
+
+      if (item.key === 'pay') {
+        active = order.status !== 'pending_pay';
+        time = order.payAt || '';
+      } else if (item.key === 'confirm') {
+        active = ['pending_confirm', 'pending_ship', 'pending_receive', 'pending_install', 'completed', 'dispute'].includes(order.status);
+        time = order.confirmAt || '';
+      } else if (item.key === 'ship') {
+        active = ['pending_ship', 'pending_receive', 'pending_install', 'completed', 'dispute'].includes(order.status);
+        time = order.shipAt || '';
+      } else if (item.key === 'receive') {
+        active = ['pending_receive', 'pending_install', 'completed'].includes(order.status) || currentIdx >= 3;
+        time = order.receiveAt || '';
+      } else if (item.key === 'install') {
+        active = ['pending_install', 'completed'].includes(order.status);
         time = order.installDate || '';
-      } else {
-        time = (order as any)[`${item.key}At`] || '';
+      } else if (item.key === 'complete') {
+        active = order.status === 'completed';
+        time = order.completeAt || '';
       }
+
+      if (order.status === 'dispute') {
+        active = ['pay', 'confirm', 'ship'].includes(item.key);
+      }
+
       return { ...item, active, time };
     });
   }, [order]);
@@ -97,6 +133,18 @@ const OrderDetailPage = () => {
     if (!order) return;
     console.info('[OrderDetail] copy orderNo:', order.id);
     Taro.setClipboardData({ data: order.id });
+  };
+
+  const handleCopyTrackingNo = () => {
+    if (!order?.trackingNo) return;
+    console.info('[OrderDetail] copy trackingNo:', order.trackingNo);
+    Taro.setClipboardData({ data: order.trackingNo });
+  };
+
+  const handleMerchantTap = () => {
+    if (!merchant) return;
+    console.info('[OrderDetail] go to merchant:', merchant.id);
+    Taro.navigateTo({ url: `/pages/merchant-detail/index?id=${merchant.id}` });
   };
 
   const handlePay = () => {
@@ -111,9 +159,10 @@ const OrderDetailPage = () => {
     setModalType('success');
 
     updateOrder(order.id, {
-      status: 'pending_ship',
+      status: 'pending_confirm',
       payAt: new Date().toLocaleString('zh-CN'),
       payMethod,
+      confirmAt: new Date(Date.now() + 5 * 60 * 1000).toLocaleString('zh-CN'),
     });
 
     setTimeout(() => {
@@ -161,7 +210,11 @@ const OrderDetailPage = () => {
   const handleDispute = () => {
     if (!order) return;
     console.info('[OrderDetail] go to dispute page, orderId:', order.id);
-    Taro.navigateTo({ url: `/pages/dispute/index?orderId=${order.id}` });
+    if (existingDispute) {
+      Taro.navigateTo({ url: `/pages/dispute/index?orderId=${order.id}&disputeId=${existingDispute.id}` });
+    } else {
+      Taro.navigateTo({ url: `/pages/dispute/index?orderId=${order.id}` });
+    }
   };
 
   const handleComplete = () => {
@@ -189,6 +242,7 @@ const OrderDetailPage = () => {
   const showInstallBtn = order.status === 'pending_install' || order.status === 'pending_receive';
   const showCompleteBtn = order.status === 'pending_install';
   const showDisputeBtn = order.status !== 'dispute' && order.status !== 'completed';
+  const showLogistics = ['pending_receive', 'pending_install', 'completed'].includes(order.status);
 
   return (
     <View className={styles.page}>
@@ -218,10 +272,20 @@ const OrderDetailPage = () => {
                 <PartTypeTag type={order.partType} />
                 <Text className={styles.depositBadge}>订金留货</Text>
               </View>
-              <Text className={styles.merchantName}>{order.merchantName}</Text>
             </View>
           </View>
         </View>
+
+        {merchant && (
+          <View className={styles.merchantRow} onClick={handleMerchantTap}>
+            <Image className={styles.merchantAvatar} src={merchant.avatar} mode="aspectFill" />
+            <View className={styles.merchantInfo}>
+              <Text className={styles.merchantName}>{merchant.name}</Text>
+              <Text className={styles.merchantMeta}>⭐ {merchant.rating} · {merchant.partCount}件在售</Text>
+            </View>
+            <Text className={styles.merchantArrow}>›</Text>
+          </View>
+        )}
 
         <View className={styles.priceRow}>
           <Text className={styles.priceLabel}>订单总价</Text>
@@ -249,6 +313,21 @@ const OrderDetailPage = () => {
             <Text className={styles.infoLabel}>下单时间</Text>
             <Text className={styles.infoValue}>{order.createdAt}</Text>
           </View>
+          {order.payAt && (
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>支付时间</Text>
+              <Text className={styles.infoValue}>{order.payAt}</Text>
+            </View>
+          )}
+          {order.trackingNo && (
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>物流单号</Text>
+              <View className={styles.trackingRow}>
+                <Text className={styles.infoValue}>{order.logisticsCompany} {order.trackingNo}</Text>
+                <Text className={styles.copyText} onClick={handleCopyTrackingNo}>复制</Text>
+              </View>
+            </View>
+          )}
           {order.installDate && (
             <View className={styles.infoRow}>
               <Text className={styles.infoLabel}>预约安装</Text>
@@ -257,6 +336,40 @@ const OrderDetailPage = () => {
           )}
         </View>
       </View>
+
+      {showLogistics && order.logisticsNodes && order.logisticsNodes.length > 0 && (
+        <View className={styles.logisticsSection}>
+          <View className={styles.sectionHeaderRow}>
+            <Text className={styles.sectionTitle}>
+              <Text className={styles.sectionIcon}>🚚</Text>
+              物流信息
+            </Text>
+            {order.logisticsCompany && order.trackingNo && (
+              <Text className={styles.logisticsMeta}>
+                {order.logisticsCompany} {order.trackingNo}
+              </Text>
+            )}
+          </View>
+          <View className={styles.logisticsTimeline}>
+            {order.logisticsNodes.map((node, idx) => (
+              <View
+                key={idx}
+                className={classnames(
+                  styles.logisticsItem,
+                  idx === 0 && styles.logisticsLatest
+                )}
+              >
+                <View className={styles.logisticsDot} />
+                <View className={styles.logisticsContent}>
+                  <Text className={styles.logisticsStatus}>{node.status}</Text>
+                  <Text className={styles.logisticsDesc}>{node.description}</Text>
+                  <Text className={styles.logisticsTime}>{node.time}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
 
       <View className={styles.timelineSection}>
         <Text className={styles.sectionTitle}>订单进度</Text>
@@ -304,6 +417,19 @@ const OrderDetailPage = () => {
             <Text className={styles.alertIcon}>5.</Text>
             <Text>安装完成前请保留好包装和配件标签</Text>
           </View>
+        </View>
+      )}
+
+      {existingDispute && (
+        <View className={styles.disputeBanner} onClick={handleDispute}>
+          <View className={styles.disputeBannerLeft}>
+            <Text className={styles.disputeBannerIcon}>⚠️</Text>
+            <View>
+              <Text className={styles.disputeBannerTitle}>维权处理中</Text>
+              <Text className={styles.disputeBannerDesc}>编号：{existingDispute.id}</Text>
+            </View>
+          </View>
+          <Text className={styles.disputeBannerArrow}>查看详情 ›</Text>
         </View>
       )}
 
@@ -477,7 +603,7 @@ const OrderDetailPage = () => {
             </View>
             <Text className={styles.successText}>操作成功</Text>
             <Text className={styles.successDesc}>
-              {order.status === 'pending_ship' ? '订金支付成功，商家正在备货' : '安装预约成功，请按时到店'}
+              {order.status === 'pending_confirm' ? '订金支付成功，商家正在备货' : '安装预约成功，请按时到店'}
             </Text>
           </View>
         </View>

@@ -128,6 +128,188 @@
   }
 }
 
+.orderSection {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionArrow {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.orderShortcuts {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-sm;
+}
+
+.orderShortcut {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm 0;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.shortcutIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.shortcutBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 8rpx;
+  background: $color-error;
+  border-radius: $radius-round;
+  @include flex-center;
+}
+
+.shortcutBadgeText {
+  font-size: 20rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.shortcutLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.disputeSection {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.disputeGroupTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-tertiary;
+  margin: $spacing-sm 0;
+  padding-left: $spacing-xs;
+  border-left: 6rpx solid $color-primary;
+  line-height: 1;
+}
+
+.disputeCard {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.disputeCardDone {
+  opacity: 0.8;
+}
+
+.disputeCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.disputeId {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.disputeStatus {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-xs;
+}
+
+.statusPending {
+  background: $color-tag-bg-urgent;
+  color: $color-warning;
+}
+
+.statusReviewing {
+  background: $color-tag-bg-used;
+  color: $color-primary;
+}
+
+.statusProcessing {
+  background: $color-tag-bg-used;
+  color: $color-primary;
+}
+
+.statusResolved {
+  background: $color-tag-bg-remanufactured;
+  color: $color-success;
+}
+
+.statusRejected {
+  background: $color-bg-page;
+  color: $color-text-tertiary;
+}
+
+.disputeCardBody {
+  line-height: 1.6;
+}
+
+.disputePartName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.disputeDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 6rpx;
+}
+
+.disputeResult {
+  font-size: $font-size-xs;
+  color: $color-success;
+  margin-top: 6rpx;
+}
+
+.disputeTime {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin-top: 6rpx;
+}
+
 .menuSection {
   padding: $spacing-md $page-padding;
 }

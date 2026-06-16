@@ -32,12 +32,16 @@ const QuoteComparePage = () => {
       id: `ORD${Date.now()}`,
       partName: session.partName,
       partType: selectedQuote.partType,
+      merchantId: selectedQuote.merchantId,
       merchantName: selectedQuote.merchantName,
+      merchantAvatar: selectedQuote.merchantAvatar,
       price: selectedQuote.price,
       deposit: Math.round(selectedQuote.price * 0.3),
       status: 'pending_pay' as const,
       createdAt: new Date().toLocaleString('zh-CN'),
       isLocal: selectedQuote.isLocal,
+      quoteId: selectedQuote.id,
+      sessionId: session.id,
     };
 
     addOrder(newOrder);

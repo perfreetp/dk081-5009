@@ -20,6 +20,12 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '正规报废车场回收',
     certDescription: '已取得二手车流通企业资质证书、废旧金属回收备案证明，所有拆车件来源可追溯',
     deliveryMethods: ['self_pickup', 'local_delivery', 'national_shipping'],
+    parts: [
+      { id: 'M1P1', name: '起动机总成', commonName: '起动机', partType: 'used', price: 380, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp1/200' },
+      { id: 'M1P2', name: '发动机总成（EA888）', commonName: '发动机总成', partType: 'used', price: 8500, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp2/200' },
+      { id: 'M1P3', name: '变速箱总成（6AT）', commonName: '变速箱', partType: 'used', price: 4200, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp3/200' },
+      { id: 'M1P4', name: '发电机总成', commonName: '发电机', partType: 'used', price: 450, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp4/200' },
+    ],
   },
   {
     id: '2',
@@ -40,6 +46,11 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '4S店置换件+报废回收',
     certDescription: '正规汽配经营企业，与多家4S店合作，配件来源正规',
     deliveryMethods: ['self_pickup', 'national_shipping'],
+    parts: [
+      { id: 'M2P1', name: '大灯总成', commonName: '大灯', partType: 'aftermarket', price: 420, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp5/200' },
+      { id: 'M2P2', name: '变速箱总成（CVT）', commonName: '变速箱', partType: 'used', price: 3800, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp6/200' },
+      { id: 'M2P3', name: '减震器总成', commonName: '减震器', partType: 'used', price: 320, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp7/200' },
+    ],
   },
   {
     id: '3',
@@ -60,6 +71,10 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '保险定损车+正规拆解厂',
     certDescription: '省内大型拆车件市场入驻商户，已通过诚信经营认证',
     deliveryMethods: ['national_shipping'],
+    parts: [
+      { id: 'M3P1', name: '方向机总成', commonName: '方向机', partType: 'used', price: 1200, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp8/200' },
+      { id: 'M3P2', name: '仪表台总成', commonName: '仪表台', partType: 'used', price: 1800, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp9/200' },
+    ],
   },
   {
     id: '4',
@@ -80,6 +95,11 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '认证再制造工厂',
     certDescription: '授权再制造件经销商，提供原厂级再制造产品，质保期长',
     deliveryMethods: ['self_pickup', 'local_delivery', 'national_shipping'],
+    parts: [
+      { id: 'M4P1', name: '减震器总成', commonName: '减震器', partType: 'remanufactured', price: 650, warranty: '1年', imageUrl: 'https://picsum.photos/seed/mp10/200' },
+      { id: 'M4P2', name: '刹车卡钳', commonName: '刹车卡钳', partType: 'remanufactured', price: 480, warranty: '1年', imageUrl: 'https://picsum.photos/seed/mp11/200' },
+      { id: 'M4P3', name: '水泵总成', commonName: '水泵', partType: 'remanufactured', price: 280, warranty: '1年', imageUrl: 'https://picsum.photos/seed/mp12/200' },
+    ],
   },
   {
     id: '5',
@@ -118,6 +138,12 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '正规报废回收+4S店渠道',
     certDescription: '本地经营15年的老牌汽配商，连续5年获评诚信经营户，与本地多家修理厂合作',
     deliveryMethods: ['self_pickup', 'local_delivery', 'national_shipping'],
+    parts: [
+      { id: 'M6P1', name: '方向机总成', commonName: '方向机', partType: 'used', price: 1180, warranty: '6个月', imageUrl: 'https://picsum.photos/seed/mp13/200' },
+      { id: 'M6P2', name: '半轴总成', commonName: '半轴', partType: 'used', price: 560, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp14/200' },
+      { id: 'M6P3', name: '空调压缩机', commonName: '空调泵', partType: 'used', price: 680, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp15/200' },
+      { id: 'M6P4', name: 'ABS泵', commonName: 'ABS泵', partType: 'used', price: 420, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp16/200' },
+    ],
   },
   {
     id: '7',
@@ -158,6 +184,10 @@ export const mockMerchants: Merchant[] = [
     recycleSource: '正规报废车场+保险渠道',
     certDescription: '专营国产汽车配件，价格透明，明码标价',
     deliveryMethods: ['self_pickup', 'local_delivery'],
+    parts: [
+      { id: 'M8P1', name: '发电机总成', commonName: '发电机', partType: 'used', price: 460, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp17/200' },
+      { id: 'M8P2', name: '转向助力泵', commonName: '助力泵', partType: 'used', price: 280, warranty: '3个月', imageUrl: 'https://picsum.photos/seed/mp18/200' },
+    ],
   },
   {
     id: '9',
