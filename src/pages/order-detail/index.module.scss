@@ -113,7 +113,7 @@
 .depositBadge {
   font-size: $font-size-xs;
   color: $color-primary;
-  background: $color-tag-bg-primary;
+  background: $color-tag-bg-used;
   padding: 4rpx 12rpx;
   border-radius: $radius-xs;
 }
@@ -220,7 +220,7 @@
 
 .installInfo {
   padding: $spacing-md;
-  background: $color-tag-bg-primary;
+  background: $color-tag-bg-used;
   border-radius: $radius-md;
   margin-top: $spacing-sm;
 }
@@ -376,7 +376,7 @@
 
   &.selected {
     border-color: $color-primary;
-    background: $color-tag-bg-primary;
+    background: $color-tag-bg-used;
   }
 }
 
@@ -461,7 +461,7 @@
   min-width: 160rpx;
 
   &.selected {
-    background: $color-tag-bg-primary;
+    background: $color-tag-bg-used;
     border-color: $color-primary;
     color: $color-primary;
   }
@@ -484,7 +484,7 @@
   color: $color-text-primary;
 
   &.selected {
-    background: $color-tag-bg-primary;
+    background: $color-tag-bg-used;
     border-color: $color-primary;
     color: $color-primary;
   }

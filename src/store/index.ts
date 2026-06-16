@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { CarModel, OrderItem } from '@/types';
+import type { CarModel, OrderItem, DisputeItem } from '@/types';
+import { mockOrders } from '@/data/orders';
 
 interface AppState {
   currentCar: CarModel | null;
@@ -18,6 +19,8 @@ interface AppState {
   addOrder: (order: OrderItem) => void;
   selectedQuoteId: string | null;
   setSelectedQuoteId: (id: string | null) => void;
+  disputes: DisputeItem[];
+  addDispute: (dispute: DisputeItem) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -36,7 +39,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   setIsUrgent: (urgent) => set({ isUrgent: urgent }),
   identifiedPart: null,
   setIdentifiedPart: (part) => set({ identifiedPart: part }),
-  orders: [],
+  orders: mockOrders,
   updateOrder: (orderId, updates) =>
     set((state) => ({
       orders: state.orders.map((o) => (o.id === orderId ? { ...o, ...updates } : o)),
@@ -47,4 +50,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     })),
   selectedQuoteId: null,
   setSelectedQuoteId: (id) => set({ selectedQuoteId: id }),
+  disputes: [],
+  addDispute: (dispute) =>
+    set((state) => ({
+      disputes: [dispute, ...state.disputes],
+    })),
 }));

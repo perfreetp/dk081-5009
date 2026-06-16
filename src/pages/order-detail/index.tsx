@@ -83,7 +83,12 @@ const OrderDetailPage = () => {
 
     return timelineTemplate.map((item, idx) => {
       const active = idx <= currentIdx;
-      const time = order[`${item.key}At` as keyof OrderItem] as string || '';
+      let time = '';
+      if (item.key === 'install') {
+        time = order.installDate || '';
+      } else {
+        time = (order as any)[`${item.key}At`] || '';
+      }
       return { ...item, active, time };
     });
   }, [order]);
@@ -203,7 +208,7 @@ const OrderDetailPage = () => {
         <View className={styles.partRow}>
           <Image
             className={styles.partImage}
-            src={part?.image || 'https://picsum.photos/seed/car-part/200'}
+            src={part?.imageUrl || 'https://picsum.photos/seed/car-part/200'}
             mode="aspectFill"
           />
           <View className={styles.partInfo}>

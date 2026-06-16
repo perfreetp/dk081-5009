@@ -12,13 +12,29 @@ const MerchantPage = () => {
 
   const filteredMerchants = useMemo(() => {
     let list = [...mockMerchants];
-    if (filter === 'local') list = list.filter((m) => m.isLocal);
-    if (filter === 'ship') list = list.filter((m) => !m.isLocal);
+    if (filter === 'local') {
+      list = list.filter((m) => 
+        m.deliveryMethods.includes('self_pickup') || 
+        m.deliveryMethods.includes('local_delivery')
+      );
+    }
+    if (filter === 'ship') {
+      list = list.filter((m) => m.deliveryMethods.includes('national_shipping'));
+    }
     return list.sort((a, b) => a.distance - b.distance);
   }, [filter]);
 
   const handleMerchantTap = (id: string) => {
+    console.info('[Merchant] tap merchant:', id);
     Taro.navigateTo({ url: `/pages/merchant-detail/index?id=${id}` });
+  };
+
+  const getDeliveryLabel = (merchant) => {
+    const hasLocal = merchant.deliveryMethods.includes('self_pickup') || merchant.deliveryMethods.includes('local_delivery');
+    const hasShip = merchant.deliveryMethods.includes('national_shipping');
+    if (hasLocal && hasShip) return '同城+全国';
+    if (hasLocal) return '同城自提';
+    return '全国发货';
   };
 
   return (
@@ -47,13 +63,11 @@ const MerchantPage = () => {
             <View className={styles.merchantTop}>
               <Image className={styles.merchantAvatar} src={merchant.avatar} mode="aspectFill" />
               <View className={styles.merchantInfo}>
-                <View style={{ display: 'flex', alignItems: 'center' }}>
+                <View style={{ display: 'flex', alignItems: 'center', gap: '16rpx' }}>
                   <Text className={styles.merchantName}>{merchant.name}</Text>
-                  {merchant.isLocal ? (
-                    <Text className={styles.localBadge}>同城自提</Text>
-                  ) : (
-                    <Text className={styles.shipBadge}>外地发货</Text>
-                  )}
+                  <Text className={merchant.isLocal ? styles.localBadge : styles.shipBadge}>
+                    {getDeliveryLabel(merchant)}
+                  </Text>
                 </View>
                 <View className={styles.merchantMeta}>
                   <Text className={styles.merchantRating}>⭐ {merchant.rating}</Text>
@@ -82,6 +96,14 @@ const MerchantPage = () => {
             )}
           </View>
         ))}
+        {filteredMerchants.length === 0 && (
+          <View style={{ padding: '120rpx 0', textAlign: 'center' }}>
+            <Text style={{ fontSize: '48rpx', opacity: 0.3 }}>📦</Text>
+            <Text style={{ fontSize: '28rpx', color: '#86909C', marginTop: '24rpx', display: 'block' }}>
+              暂无符合条件的商家
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

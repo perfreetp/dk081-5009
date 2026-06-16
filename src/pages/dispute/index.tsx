@@ -116,7 +116,7 @@ const DisputePage = () => {
         <View className={styles.orderHeader}>
           <Image
             className={styles.partImage}
-            src={part?.image || 'https://picsum.photos/seed/car-part/200'}
+            src={part?.imageUrl || 'https://picsum.photos/seed/car-part/200'}
             mode="aspectFill"
           />
           <View className={styles.orderInfo}>

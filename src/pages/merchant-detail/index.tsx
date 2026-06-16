@@ -142,16 +142,17 @@ const MerchantDetailPage = () => {
           </View>
         ) : (
           <View className={styles.certCard}>
-          <View className={styles.certItem}>
-            <Text className={styles.certIcon}>⚠️</Text>
-            <View className={styles.certContent}>
-              <Text className={styles.certTitle}>该商家暂未上传资质认证</Text>
-              <Text className={styles.certDesc}>
-                建议优先选择已认证商家，配件来源更有保障
-              </Text>
+            <View className={styles.certItem}>
+              <Text className={styles.certIcon}>⚠️</Text>
+              <View className={styles.certContent}>
+                <Text className={styles.certTitle}>该商家暂未上传资质认证</Text>
+                <Text className={styles.certDesc}>
+                  建议优先选择已认证商家，配件来源更有保障
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
+        )}
       </View>
 
       {merchant.recycleSource && (
@@ -172,7 +173,7 @@ const MerchantDetailPage = () => {
             </View>
           </View>
         </View>
-      </View>
+      )}
 
       <View className={styles.footer}>
         <View

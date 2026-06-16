@@ -84,7 +84,7 @@
   color: $color-text-primary;
 
   &.selected {
-    background: $color-tag-bg-primary;
+    background: $color-tag-bg-used;
     border-color: $color-primary;
     color: $color-primary;
   }
@@ -191,7 +191,7 @@
 .statusBadge {
   display: inline-block;
   padding: 8rpx 24rpx;
-  background: $color-tag-bg-primary;
+  background: $color-tag-bg-used;
   color: $color-primary;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;

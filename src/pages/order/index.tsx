@@ -2,18 +2,19 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
-import { mockOrders } from '@/data/orders';
+import { useAppStore } from '@/store';
 import PartTypeTag from '@/components/PartTypeTag';
 import styles from './index.module.scss';
 
-type OrderTab = 'all' | 'pending_pay' | 'pending_ship' | 'pending_receive' | 'completed' | 'disputed';
+type OrderTab = 'all' | 'pending_pay' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
 
 const statusMap: Record<string, { label: string; className: string }> = {
   pending_pay: { label: '待付订金', className: 'statusPendingPay' },
   pending_ship: { label: '待发货', className: 'statusPendingShip' },
   pending_receive: { label: '待收货', className: 'statusPendingReceive' },
+  pending_install: { label: '待安装', className: 'statusPendingReceive' },
   completed: { label: '已完成', className: 'statusCompleted' },
-  disputed: { label: '维权中', className: 'statusDisputed' },
+  dispute: { label: '维权中', className: 'statusDisputed' },
 };
 
 const tabs: { key: OrderTab; label: string }[] = [
@@ -21,34 +22,38 @@ const tabs: { key: OrderTab; label: string }[] = [
   { key: 'pending_pay', label: '待付款' },
   { key: 'pending_ship', label: '待发货' },
   { key: 'pending_receive', label: '待收货' },
+  { key: 'pending_install', label: '待安装' },
   { key: 'completed', label: '已完成' },
-  { key: 'disputed', label: '维权' },
+  { key: 'dispute', label: '维权' },
 ];
 
 const OrderPage = () => {
   const [tab, setTab] = useState<OrderTab>('all');
+  const { orders } = useAppStore();
 
   const filteredOrders = useMemo(() => {
-    if (tab === 'all') return mockOrders;
-    return mockOrders.filter((o) => o.status === tab);
-  }, [tab]);
+    if (tab === 'all') return orders;
+    return orders.filter((o) => o.status === tab);
+  }, [tab, orders]);
 
   const handleOrderTap = (id: string) => {
+    console.info('[Order] tap order:', id);
     Taro.navigateTo({ url: `/pages/order-detail/index?id=${id}` });
   };
 
   const handlePay = (id: string) => {
     console.info('[Order] pay deposit', id);
-    Taro.navigateTo({ url: `/pages/order-detail/index?id=${id}&action=pay` });
+    Taro.navigateTo({ url: `/pages/order-detail/index?id=${id}` });
   };
 
   const handleDispute = (id: string) => {
+    console.info('[Order] view dispute', id);
     Taro.navigateTo({ url: `/pages/dispute/index?orderId=${id}` });
   };
 
   return (
     <View className={styles.page}>
-      <View className={styles.tabBar}>
+      <ScrollView scrollX className={styles.tabBar}>
         {tabs.map((t) => (
           <View key={t.key} className={styles.tabItem} onClick={() => setTab(t.key)}>
             <Text className={classnames(styles.tabText, t === tab && styles.tabTextActive)}>
@@ -57,12 +62,12 @@ const OrderPage = () => {
             {t === tab && <View className={styles.tabUnderline} />}
           </View>
         ))}
-      </View>
+      </ScrollView>
 
       <ScrollView scrollY style={{ height: 'calc(100vh - 120rpx)' }}>
         <View className={styles.orderList}>
           {filteredOrders.map((order) => {
-            const status = statusMap[order.status];
+            const status = statusMap[order.status] || statusMap.pending_pay;
             return (
               <View key={order.id} className={styles.orderCard} onClick={() => handleOrderTap(order.id)}>
                 <View className={styles.orderHeader}>
@@ -111,7 +116,7 @@ const OrderPage = () => {
                         <Text style={{ fontSize: '24rpx', color: '#fff' }}>付订金</Text>
                       </View>
                     )}
-                    {order.status === 'disputed' && (
+                    {order.status === 'dispute' && (
                       <View
                         className={classnames(styles.actionBtn, styles.btnWarning)}
                         onClick={(e) => { e.stopPropagation(); handleDispute(order.id); }}
@@ -130,6 +135,14 @@ const OrderPage = () => {
               </View>
             );
           })}
+          {filteredOrders.length === 0 && (
+            <View style={{ padding: '160rpx 0', textAlign: 'center' }}>
+              <Text style={{ fontSize: '80rpx', opacity: 0.3 }}>📋</Text>
+              <Text style={{ fontSize: '28rpx', color: '#86909C', marginTop: '24rpx', display: 'block' }}>
+                暂无相关订单
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
