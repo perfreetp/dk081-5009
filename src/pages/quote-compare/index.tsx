@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
-import { mockQuoteSessions } from '@/data/quotes';
 import { useAppStore } from '@/store';
 import PartTypeTag from '@/components/PartTypeTag';
 import styles from './index.module.scss';
@@ -10,12 +9,16 @@ import styles from './index.module.scss';
 const QuoteComparePage = () => {
   const router = useRouter();
   const sessionId = router.params.sessionId as string;
-  const { addOrder } = useAppStore();
+  const { addOrder, getQuoteSessionById } = useAppStore();
   const [selectedQuoteId, setSelectedQuoteId] = useState<string | null>(null);
 
   const session = useMemo(() => {
-    return mockQuoteSessions.find(s => s.id === sessionId) || mockQuoteSessions[0];
-  }, [sessionId]);
+    const s = getQuoteSessionById(sessionId);
+    if (s) return s;
+    // fallback to any session from store
+    const fallback = useAppStore.getState().quoteSessions[0];
+    return fallback;
+  }, [sessionId, getQuoteSessionById]);
 
   const quotes = session?.quotes || [];
   const selectedQuote = quotes.find(q => q.id === selectedQuoteId);

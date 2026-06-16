@@ -386,3 +386,11 @@
   color: $color-text-secondary;
   margin-top: 4rpx;
 }
+
+.statusActive {
+  color: $color-primary !important;
+}
+
+.statusClosed {
+  color: $color-text-tertiary !important;
+}

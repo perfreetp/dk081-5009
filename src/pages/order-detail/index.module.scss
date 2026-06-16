@@ -364,6 +364,12 @@
   border: 2rpx solid $color-price;
 }
 
+.btnOutline {
+  background: transparent;
+  color: #52C41A;
+  border: 2rpx dashed #52C41A;
+}
+
 .modalOverlay {
   position: fixed;
   top: 0;

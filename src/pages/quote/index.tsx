@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
-import { mockQuoteSessions } from '@/data/quotes';
+import { useAppStore } from '@/store';
 import PartTypeTag from '@/components/PartTypeTag';
 import UrgentTag from '@/components/UrgentTag';
 import styles from './index.module.scss';
@@ -11,21 +11,22 @@ type TabType = 'active' | 'closed';
 
 const QuotePage = () => {
   const [tab, setTab] = useState<TabType>('active');
+  const { quoteSessions } = useAppStore();
 
   const activeSessions = useMemo(
-    () => mockQuoteSessions.filter((s) => s.status === 'active'),
-    []
+    () => quoteSessions.filter((s) => s.status === 'active'),
+    [quoteSessions]
   );
   const closedSessions = useMemo(
-    () => mockQuoteSessions.filter((s) => s.status === 'closed'),
-    []
+    () => quoteSessions.filter((s) => s.status === 'closed'),
+    [quoteSessions]
   );
 
   const currentSessions = tab === 'active' ? activeSessions : closedSessions;
   const totalUnread = activeSessions.reduce((sum, s) => sum + s.unreadCount, 0);
 
   const handleSessionTap = (id: string) => {
-    const session = mockQuoteSessions.find((s) => s.id === id);
+    const session = quoteSessions.find((s) => s.id === id);
     if (session && session.quotes.length >= 2) {
       Taro.navigateTo({ url: `/pages/quote-compare/index?sessionId=${id}` });
     }

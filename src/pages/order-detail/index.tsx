@@ -35,7 +35,16 @@ const timelineTemplate = [
 const OrderDetailPage = () => {
   const router = useRouter();
   const orderId = router.params.id as string;
-  const { orders, updateOrder, getDisputeByOrderId } = useAppStore();
+  const {
+    orders,
+    updateOrder,
+    getDisputeByOrderId,
+    confirmOrderByMerchant,
+    shipOrder,
+    receiveOrder,
+    scheduleInstallForOrder,
+    completeOrder,
+  } = useAppStore();
 
   const [modalType, setModalType] = useState<ModalType>(null);
   const [payMethod, setPayMethod] = useState<PayMethod>('wechat');
@@ -156,14 +165,17 @@ const OrderDetailPage = () => {
     if (!order) return;
     console.info('[OrderDetail] confirm pay with method:', payMethod);
 
-    setModalType('success');
+    const payAt = new Date().toLocaleString('zh-CN');
+    const confirmAt = new Date(Date.now() + 5 * 60 * 1000).toLocaleString('zh-CN');
 
     updateOrder(order.id, {
       status: 'pending_confirm',
-      payAt: new Date().toLocaleString('zh-CN'),
+      payAt,
       payMethod,
-      confirmAt: new Date(Date.now() + 5 * 60 * 1000).toLocaleString('zh-CN'),
+      confirmAt,
     });
+
+    setModalType('success');
 
     setTimeout(() => {
       setModalType(null);
@@ -186,10 +198,7 @@ const OrderDetailPage = () => {
     const installDate = `${selectedDate} ${selectedTime}`;
     console.info('[OrderDetail] schedule install:', installDate);
 
-    updateOrder(order.id, {
-      status: 'pending_install',
-      installDate,
-    });
+    scheduleInstallForOrder(order.id, installDate);
 
     setModalType('success');
     setTimeout(() => {
@@ -200,11 +209,22 @@ const OrderDetailPage = () => {
   const handleConfirmReceive = () => {
     if (!order) return;
     console.info('[OrderDetail] confirm receive');
-    updateOrder(order.id, {
-      status: 'pending_install',
-      receiveAt: new Date().toLocaleString('zh-CN'),
-    });
+    receiveOrder(order.id);
     Taro.showToast({ title: '已确认收货', icon: 'success' });
+  };
+
+  const handleMerchantConfirm = () => {
+    if (!order) return;
+    console.info('[OrderDetail] simulate merchant confirm');
+    const ok = confirmOrderByMerchant(order.id);
+    Taro.showToast({ title: ok ? '商家已确认' : '操作失败', icon: ok ? 'success' : 'none' });
+  };
+
+  const handleMerchantShip = () => {
+    if (!order) return;
+    console.info('[OrderDetail] simulate merchant ship');
+    const ok = shipOrder(order.id);
+    Taro.showToast({ title: ok ? '商家已发货' : '操作失败', icon: ok ? 'success' : 'none' });
   };
 
   const handleDispute = () => {
@@ -220,11 +240,8 @@ const OrderDetailPage = () => {
   const handleComplete = () => {
     if (!order) return;
     console.info('[OrderDetail] complete order');
-    updateOrder(order.id, {
-      status: 'completed',
-      completeAt: new Date().toLocaleString('zh-CN'),
-    });
-    Taro.showToast({ title: '订单已完成', icon: 'success' });
+    const ok = completeOrder(order.id);
+    Taro.showToast({ title: ok ? '订单已完成' : '操作失败', icon: ok ? 'success' : 'none' });
   };
 
   if (!order) {
@@ -238,6 +255,8 @@ const OrderDetailPage = () => {
   }
 
   const showPayBtn = order.status === 'pending_pay';
+  const showMerchantConfirmBtn = ['pending_pay', 'pending_confirm'].includes(order.status);
+  const showMerchantShipBtn = ['pending_confirm', 'pending_ship'].includes(order.status);
   const showReceiveBtn = order.status === 'pending_receive';
   const showInstallBtn = order.status === 'pending_install' || order.status === 'pending_receive';
   const showCompleteBtn = order.status === 'pending_install';
@@ -440,6 +459,22 @@ const OrderDetailPage = () => {
             onClick={handleDispute}
           >
             <Text>申请介入</Text>
+          </View>
+        )}
+        {showMerchantConfirmBtn && !order.confirmAt && (
+          <View
+            className={classnames(styles.footerBtn, styles.btnOutline)}
+            onClick={handleMerchantConfirm}
+          >
+            <Text>模拟商家确认</Text>
+          </View>
+        )}
+        {showMerchantShipBtn && order.confirmAt && !order.trackingNo && (
+          <View
+            className={classnames(styles.footerBtn, styles.btnOutline)}
+            onClick={handleMerchantShip}
+          >
+            <Text>模拟商家发货</Text>
           </View>
         )}
         {showReceiveBtn && (
