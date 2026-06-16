@@ -1,4 +1,257 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.header {
+  background: $color-bg-card;
+  padding: $spacing-lg $page-padding;
+  box-shadow: $shadow-card;
+}
+
+.merchantInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.merchantAvatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-lg;
+  flex-shrink: 0;
+}
+
+.merchantBase {
+  flex: 1;
+  min-width: 0;
+}
+
+.merchantName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.merchantMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: 8rpx;
+  flex-wrap: wrap;
+}
+
+.merchantRating {
+  font-size: $font-size-md;
+  color: $color-urgent;
+  font-weight: $font-weight-medium;
+}
+
+.merchantReview {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.merchantDistance {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.certBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  background: $color-tag-bg-used;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  margin-top: 8rpx;
+}
+
+.noCertBadge {
+  background: $color-bg-page;
+  color: $color-text-tertiary;
+}
+
+.section {
+  background: $color-bg-card;
+  margin-top: $spacing-md;
+  padding: $spacing-lg $page-padding;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.sectionIcon {
+  font-size: $font-size-lg;
+}
+
+.infoRow {
+  display: flex;
+  padding: $spacing-sm 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.infoLabel {
+  width: 160rpx;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  word-break: break-all;
+}
+
+.tagsRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  padding: $spacing-sm 0;
+}
+
+.tag {
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+  background: $color-bg-page;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.deliveryMethods {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+}
+
+.deliveryMethod {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  border: 2rpx solid $color-border;
+  transition: all $transition-fast;
+
+  &.active {
+    border-color: $color-primary;
+    background: $color-tag-bg-used;
+  }
+}
+
+.deliveryIcon {
+  font-size: 40rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.deliveryText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  text-align: center;
+
+  .active & {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.certCard {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+}
+
+.certItem {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-sm 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.certIcon {
+  font-size: $font-size-md;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.certContent {
+  flex: 1;
+}
+
+.certTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.certDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  line-height: $line-height-normal;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-md});
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.footerBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  min-width: auto;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.btnSecondary {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+  border: 1rpx solid $color-border;
+}
+
+.btnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+}

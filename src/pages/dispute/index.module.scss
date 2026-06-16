@@ -1,4 +1,381 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 180rpx;
+}
+
+.orderCard {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.orderHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.partImage {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+}
+
+.orderInfo {
+  flex: 1;
+}
+
+.partName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.orderNo {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 8rpx;
+}
+
+.formSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.questionTypeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.questionType {
+  @include button-reset;
+  padding: 20rpx 32rpx;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+
+  &.selected {
+    background: $color-tag-bg-primary;
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.textAreaWrapper {
+  position: relative;
+}
+
+.textArea {
+  width: 100%;
+  min-height: 240rpx;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+
+  &:focus {
+    border-color: $color-primary;
+  }
+}
+
+.charCount {
+  position: absolute;
+  right: $spacing-sm;
+  bottom: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+}
+
+.imageUploader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.uploadItem {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-md;
+  border: 2rpx dashed $color-border;
+  background: $color-bg-page;
+  @include flex-center;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.uploadIcon {
+  font-size: $font-size-xl;
+  color: $color-text-disabled;
+}
+
+.uploadText {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+}
+
+.uploadedImage {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-md;
+}
+
+.tipsSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: rgba(26, 109, 255, 0.06);
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-primary;
+}
+
+.tipsTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.tipsItem {
+  display: flex;
+  gap: $spacing-xs;
+  padding: 8rpx 0;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.tipsIcon {
+  flex-shrink: 0;
+  color: $color-primary;
+}
+
+.progressSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  background: $color-tag-bg-primary;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-xs;
+  margin-bottom: $spacing-sm;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 40rpx;
+  margin-top: $spacing-md;
+}
+
+.timelineItem {
+  position: relative;
+  padding: 16rpx 0 32rpx 0;
+  border-left: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+
+  &.active {
+    .timelineDot {
+      background: $color-primary;
+      box-shadow: 0 0 0 6rpx rgba(26, 109, 255, 0.2);
+    }
+    .timelineTitle {
+      color: $color-primary;
+    }
+  }
+}
+
+.timelineDot {
+  position: absolute;
+  left: -9rpx;
+  top: 24rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+}
+
+.timelineContent {
+  margin-left: $spacing-sm;
+}
+
+.timelineTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.timelineDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  line-height: $line-height-normal;
+}
+
+.timelineTime {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin-top: 4rpx;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-md});
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.footerBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  @include flex-center;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.9;
+  }
+}
+
+.btnSecondary {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+  border: 2rpx solid $color-border;
+}
+
+.btnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  @include flex-center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  margin: 0 $spacing-lg;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-md;
+}
+
+.modalContent {
+  margin-bottom: $spacing-xl;
+  text-align: center;
+}
+
+.successIcon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
+  @include flex-center;
+  margin: 0 auto $spacing-md;
+}
+
+.successIconText {
+  font-size: 72rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.successText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.successDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  margin-top: $spacing-sm;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.modalBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  @include flex-center;
+
+  &:active {
+    opacity: 0.9;
+  }
+}

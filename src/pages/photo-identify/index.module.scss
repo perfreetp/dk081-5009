@@ -1,4 +1,331 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg $page-padding;
+  background: $color-bg-card;
+}
+
+.step {
+  @include flex-center;
+  flex-direction: column;
+  flex: 1;
+}
+
+.stepCircle {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  @include flex-center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  margin-bottom: 8rpx;
+  background: $color-border;
+  color: $color-text-tertiary;
+}
+
+.stepActive .stepCircle {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.stepDone .stepCircle {
+  background: $color-success;
+  color: $color-text-white;
+}
+
+.stepText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.stepActive .stepText {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.stepDone .stepText {
+  color: $color-success;
+}
+
+.stepLine {
+  width: 60rpx;
+  height: 4rpx;
+  background: $color-border;
+  margin: 0 8rpx;
+  margin-bottom: 32rpx;
+}
+
+.stepLineDone {
+  background: $color-success;
+}
+
+.content {
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 160rpx;
+}
+
+.uploadSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.uploadIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.uploadTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.uploadDesc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: $line-height-loose;
+  margin-bottom: $spacing-lg;
+}
+
+.uploadBtn {
+  @include button-reset;
+  background: $color-primary;
+  border-radius: $radius-button;
+  padding: 0 $spacing-xl;
+  height: 88rpx;
+  font-size: $font-size-md;
+  color: $color-text-white;
+  width: 100%;
+  white-space: nowrap;
+  min-width: auto;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.tipsCard {
+  background: $color-tag-bg-aftermarket;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.tipsTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-aftermarket;
+  margin-bottom: $spacing-xs;
+}
+
+.tipsText {
+  font-size: $font-size-xs;
+  color: $color-aftermarket;
+  line-height: $line-height-normal;
+}
+
+.recognizingSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.recognizingAnimation {
+  width: 300rpx;
+  height: 300rpx;
+  margin: 0 auto $spacing-lg;
+  position: relative;
+}
+
+.recognizingImg {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-md;
+}
+
+.recognizingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 107, 53, 0.1);
+  border-radius: $radius-md;
+  @include flex-center;
+}
+
+.scanLine {
+  width: 80%;
+  height: 4rpx;
+  background: $color-urgent;
+  box-shadow: 0 0 10rpx $color-urgent;
+  animation: scan 2s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%, 100% { transform: translateY(-100rpx); opacity: 0.5; }
+  50% { transform: translateY(100rpx); opacity: 1; }
+}
+
+.recognizingText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-sm;
+}
+
+.recognizingHint {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.resultSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.resultTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.resultHint {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-md;
+}
+
+.partOption {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+  transition: all $transition-fast;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-tag-bg-used;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.partRadio {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  border: 3rpx solid $color-border;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+  @include flex-center;
+  transition: all $transition-fast;
+
+  .selected & {
+    border-color: $color-primary;
+    background: $color-primary;
+  }
+}
+
+.partRadioDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  display: none;
+
+  .selected & {
+    display: block;
+  }
+}
+
+.partInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.partName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.partCategory {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.partDesc {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin-top: 4rpx;
+}
+
+.confidence {
+  font-size: $font-size-xs;
+  color: $color-success;
+  margin-left: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-md});
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.confirmBtn {
+  @include button-reset;
+  background: $color-primary;
+  border-radius: $radius-button;
+  height: 96rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  width: 100%;
+  white-space: nowrap;
+  min-width: auto;
+
+  &:disabled {
+    background: $color-border;
+    color: $color-text-disabled;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.9;
+  }
+}

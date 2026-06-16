@@ -35,8 +35,14 @@ export interface Merchant {
   isLocal: boolean;
   hasCert: boolean;
   address: string;
+  phone: string;
+  licenseNo: string;
+  licenseExpiry: string;
+  businessHours: string;
   tags: string[];
   recycleSource?: string;
+  certDescription?: string;
+  deliveryMethods: ('self_pickup' | 'local_delivery' | 'national_shipping')[];
 }
 
 export interface QuoteItem {
@@ -76,10 +82,26 @@ export interface OrderItem {
   merchantName: string;
   price: number;
   deposit: number;
-  status: 'pending_pay' | 'pending_ship' | 'pending_receive' | 'completed' | 'disputed';
+  status: 'pending_pay' | 'pending_ship' | 'pending_receive' | 'pending_install' | 'completed' | 'dispute';
   createdAt: string;
   installDate?: string;
+  payAt?: string;
+  payMethod?: string;
+  shipAt?: string;
+  receiveAt?: string;
+  completeAt?: string;
+  disputeId?: string;
   isLocal: boolean;
+}
+
+export interface DisputeItem {
+  id: string;
+  orderId: string;
+  questionType: 'mismatch' | 'quality' | 'shipping' | 'other';
+  description: string;
+  images: string[];
+  status: 'pending' | 'reviewing' | 'processing' | 'resolved' | 'rejected';
+  createdAt: string;
 }
 
 export interface HotCategory {

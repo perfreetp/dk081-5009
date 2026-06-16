@@ -1,4 +1,524 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 180rpx;
+}
+
+.statusHeader {
+  background: linear-gradient(135deg, $color-primary 0%, #4A8CFF 100%);
+  padding: $spacing-xl $page-padding;
+  color: $color-text-white;
+}
+
+.statusTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+}
+
+.statusDesc {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-top: $spacing-xs;
+}
+
+.orderCard {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.orderNoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.orderNo {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.copyBtn {
+  @include button-reset;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background: transparent;
+}
+
+.partRow {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.partImage {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+}
+
+.partInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.partName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.partTypeRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin: 8rpx 0;
+}
+
+.merchantName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  @include text-ellipsis;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+}
+
+.priceLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.priceValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}
+
+.depositBadge {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background: $color-tag-bg-primary;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+}
+
+.orderInfoSection {
+  margin-top: $spacing-sm;
+  padding-top: $spacing-sm;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12rpx 0;
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  text-align: right;
+  flex: 1;
+  margin-left: $spacing-md;
+  line-height: $line-height-normal;
+}
+
+.timelineSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 40rpx;
+}
+
+.timelineItem {
+  position: relative;
+  padding: 16rpx 0 32rpx 0;
+  border-left: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+}
+
+.timelineDot {
+  position: absolute;
+  left: -9rpx;
+  top: 24rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+
+  &.active {
+    background: $color-primary;
+    box-shadow: 0 0 0 6rpx rgba(26, 109, 255, 0.2);
+  }
+}
+
+.timelineContent {
+  margin-left: $spacing-sm;
+}
+
+.timelineTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+
+  .active & {
+    color: $color-primary;
+  }
+}
+
+.timelineDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  line-height: $line-height-normal;
+}
+
+.timelineTime {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin-top: 4rpx;
+}
+
+.installInfo {
+  padding: $spacing-md;
+  background: $color-tag-bg-primary;
+  border-radius: $radius-md;
+  margin-top: $spacing-sm;
+}
+
+.installText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  line-height: $line-height-normal;
+}
+
+.alertSection {
+  margin: $spacing-md $page-padding;
+  padding: $spacing-md;
+  background: $color-tag-bg-aftermarket;
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-aftermarket;
+}
+
+.alertTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-aftermarket;
+  margin-bottom: $spacing-sm;
+}
+
+.alertItem {
+  display: flex;
+  gap: $spacing-xs;
+  padding: 8rpx 0;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.alertIcon {
+  flex-shrink: 0;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-md});
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.footerBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  @include flex-center;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.9;
+  }
+}
+
+.btnSecondary {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+  border: 2rpx solid $color-border;
+}
+
+.btnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.btnDanger {
+  background: transparent;
+  color: $color-price;
+  border: 2rpx solid $color-price;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  @include flex-center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  margin: 0 $spacing-lg;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-md;
+}
+
+.modalContent {
+  margin-bottom: $spacing-xl;
+}
+
+.payAmountRow {
+  text-align: center;
+  padding: $spacing-lg 0;
+}
+
+.payLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.payAmount {
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  color: $color-price;
+  margin: $spacing-xs 0;
+}
+
+.payFull {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.payMethods {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.payMethod {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-tag-bg-primary;
+  }
+}
+
+.payIcon {
+  font-size: $font-size-xl;
+}
+
+.payMethodName {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.payRadio {
+  width: 36rpx;
+  height: 36rpx;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-round;
+  @include flex-center;
+
+  .selected & {
+    border-color: $color-primary;
+    background: $color-primary;
+  }
+}
+
+.payRadioCheck {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  display: none;
+  font-weight: $font-weight-bold;
+
+  .selected & {
+    display: block;
+  }
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.modalBtn {
+  @include button-reset;
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  @include flex-center;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.datePickerSection {
+  margin: $spacing-sm 0;
+}
+
+.dateLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.dateOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.dateOption {
+  @include button-reset;
+  padding: 16rpx 32rpx;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  text-align: center;
+  min-width: 160rpx;
+
+  &.selected {
+    background: $color-tag-bg-primary;
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.timeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.timeOption {
+  @include button-reset;
+  padding: 12rpx 24rpx;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+
+  &.selected {
+    background: $color-tag-bg-primary;
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.successIcon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-round;
+  background: #52C41A;
+  @include flex-center;
+  margin: 0 auto $spacing-md;
+}
+
+.successIconText {
+  font-size: 72rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.successText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+}
+
+.successDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  text-align: center;
+  margin-top: $spacing-sm;
+}

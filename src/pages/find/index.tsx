@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, Slider } from '@tarojs/components';
+import { View, Text, Image, Slider, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import { useAppStore } from '@/store';
@@ -8,12 +8,14 @@ import PartTypeTag from '@/components/PartTypeTag';
 import styles from './index.module.scss';
 
 const FindPage = () => {
-  const { currentCar, budget, setBudget, isUrgent, setIsUrgent } = useAppStore();
+  const { currentCar, budget, setBudget, isUrgent, setIsUrgent, addSearchHistory, identifiedPart, setIdentifiedPart } = useAppStore();
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = () => {
     if (!searchValue.trim()) return;
-    Taro.navigateTo({ url: `/pages/search/index?keyword=${encodeURIComponent(searchValue)}` });
+    addSearchHistory(searchValue.trim());
+    Taro.navigateTo({ url: `/pages/search/index?keyword=${encodeURIComponent(searchValue.trim())}` });
+    setSearchValue('');
   };
 
   const handleCarIdentify = () => {
@@ -25,11 +27,16 @@ const FindPage = () => {
   };
 
   const handleCategoryTap = (name: string) => {
+    addSearchHistory(name);
     Taro.navigateTo({ url: `/pages/search/index?keyword=${encodeURIComponent(name)}` });
   };
 
   const handlePartTap = (id: string) => {
     Taro.navigateTo({ url: `/pages/part-detail/index?id=${id}` });
+  };
+
+  const clearIdentifiedPart = () => {
+    setIdentifiedPart(null);
   };
 
   return (
@@ -62,14 +69,43 @@ const FindPage = () => {
           )}
         </View>
 
-        <View className={styles.searchBar} onClick={handleSearch}>
+        <View className={styles.searchBar}>
           <Text className={styles.searchIcon}>🔍</Text>
-          {searchValue ? (
-            <Text className={styles.searchInput}>{searchValue}</Text>
-          ) : (
-            <Text className={styles.searchPlaceholder}>搜索配件名称，如"发动机""方向机"</Text>
+          <Input
+            className={styles.searchInput}
+            placeholder="搜索配件名称，如发动机、方向机"
+            placeholderClass={styles.searchPlaceholder}
+            value={searchValue}
+            onInput={(e) => setSearchValue(e.detail.value)}
+            onConfirm={handleSearch}
+            confirmType="search"
+          />
+          {searchValue && (
+            <View className={styles.searchBtn} onClick={handleSearch}>
+              <Text style={{ fontSize: '28rpx', color: '#fff' }}>搜索</Text>
+            </View>
           )}
         </View>
+
+        {identifiedPart && (
+          <View className={styles.identifiedResult}>
+            <View className={styles.identifiedInfo}>
+              <Text className={styles.identifiedIcon}>✅</Text>
+              <View style={{ flex: 1 }}>
+                <Text className={styles.identifiedTitle}>已识别：{identifiedPart.name}</Text>
+                <Text className={styles.identifiedCategory}>{identifiedPart.category}</Text>
+              </View>
+            </View>
+            <View className={styles.identifiedActions}>
+              <View className={styles.identifiedBtn} onClick={clearIdentifiedPart}>
+                <Text style={{ fontSize: '24rpx', color: '#86909C' }}>清除</Text>
+              </View>
+              <View className={styles.identifiedBtnPrimary} onClick={() => handleCategoryTap(identifiedPart.name)}>
+                <Text style={{ fontSize: '24rpx', color: '#fff' }}>去询价</Text>
+              </View>
+            </View>
+          </View>
+        )}
       </View>
 
       <View className={styles.quickActions}>

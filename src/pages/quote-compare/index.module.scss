@@ -1,4 +1,280 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.header {
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  box-shadow: $shadow-card;
+}
+
+.partInfo {
+  margin-bottom: $spacing-sm;
+}
+
+.partName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.partCar {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.tipsRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  padding: $spacing-sm;
+  background: $color-tag-bg-aftermarket;
+  border-radius: $radius-xs;
+}
+
+.tipsIcon {
+  font-size: $font-size-sm;
+  flex-shrink: 0;
+}
+
+.tipsText {
+  font-size: $font-size-xs;
+  color: $color-aftermarket;
+  line-height: $line-height-normal;
+}
+
+.compareTable {
+  padding: $spacing-md $page-padding;
+}
+
+.tableHeader {
+  display: flex;
+  background: $color-primary;
+  border-radius: $radius-md $radius-md 0 0;
+  overflow: hidden;
+}
+
+.tableHeaderCell {
+  flex: 1;
+  @include flex-center;
+  padding: $spacing-md;
+  min-height: 80rpx;
+
+  &:not(:last-child) {
+    border-right: 1rpx solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.tableHeaderText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  text-align: center;
+}
+
+.tableBody {
+  background: $color-bg-card;
+  border-radius: 0 0 $radius-md $radius-md;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.tableRow {
+  display: flex;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.tableCell {
+  flex: 1;
+  padding: $spacing-md;
+  min-height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:not(:last-child) {
+    border-right: 1rpx solid $color-divider;
+  }
+}
+
+.tableLabelCell {
+  background: $color-bg-page;
+  flex: 0.8;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.tableLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.tableValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  text-align: center;
+}
+
+.priceValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}
+
+.originalPrice {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  text-decoration: line-through;
+  margin-top: 4rpx;
+}
+
+.deliveryDays {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.warrantyText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  text-align: center;
+}
+
+.merchantName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  text-align: center;
+  @include text-ellipsis-multi(2);
+}
+
+.merchantAvatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  margin-bottom: 8rpx;
+}
+
+.merchantMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  text-align: center;
+}
+
+.messageBox {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  text-align: left;
+  padding: 8rpx 12rpx;
+  background: $color-bg-page;
+  border-radius: $radius-xs;
+  width: 100%;
+  @include text-ellipsis-multi(3);
+}
+
+.selectCell {
+  background: $color-bg-page;
+}
+
+.selectBtn {
+  @include button-reset;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  border: 3rpx solid $color-border;
+  background: $color-bg-card;
+  @include flex-center;
+  transition: all $transition-fast;
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-primary;
+  }
+}
+
+.selectCheck {
+  font-size: $font-size-sm;
+  color: $color-bg-card;
+  display: none;
+  font-weight: $font-weight-bold;
+
+  .selected & {
+    display: block;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-md});
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.selectedInfo {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  text-align: center;
+}
+
+.selectedPrice {
+  color: $color-price;
+  font-weight: $font-weight-semibold;
+}
+
+.placeOrderBtn {
+  @include button-reset;
+  background: $color-primary;
+  border-radius: $radius-button;
+  height: 96rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  width: 100%;
+  white-space: nowrap;
+  min-width: auto;
+
+  &:disabled {
+    background: $color-border;
+    color: $color-text-disabled;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.9;
+  }
+}
+
+.noQuotes {
+  @include flex-center;
+  flex-direction: column;
+  padding: 160rpx 0;
+}
+
+.noQuotesIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.3;
+}
+
+.noQuotesText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}

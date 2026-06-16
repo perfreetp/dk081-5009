@@ -1,4 +1,280 @@
 @use '@/styles/variables.scss' as *;
-.container { @include flex-center; flex-direction: column; min-height: 100vh; background: $color-bg-page; padding: 0 $page-padding; }
-.title { font-size: $font-size-lg; color: $color-text-primary; font-weight: $font-weight-semibold; margin-bottom: $spacing-sm; }
-.desc { font-size: $font-size-md; color: $color-text-tertiary; }
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.searchHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.searchBar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  padding: 0 $spacing-md;
+  height: 72rpx;
+}
+
+.searchIcon {
+  font-size: 32rpx;
+  margin-right: $spacing-sm;
+  color: $color-text-tertiary;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.searchPlaceholder {
+  font-size: $font-size-md;
+  color: $color-text-disabled;
+}
+
+.cancelBtn {
+  @include button-reset;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  padding: 0 $spacing-sm;
+  height: 72rpx;
+  white-space: nowrap;
+  min-width: 80rpx;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.content {
+  padding: $spacing-md $page-padding;
+}
+
+.historySection {
+  margin-bottom: $spacing-xl;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.clearBtn {
+  @include button-reset;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  padding: 0;
+  height: auto;
+  min-width: auto;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.historyTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.historyTag {
+  @include button-reset;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  padding: 10rpx 24rpx;
+  height: auto;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  min-width: auto;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.hotSection {
+  margin-bottom: $spacing-xl;
+}
+
+.hotList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.hotItem {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  height: auto;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.hotRank {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-xs;
+  @include flex-center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.rankTop1 { background: $color-error; }
+.rankTop2 { background: $color-urgent; }
+.rankTop3 { background: $color-warning; }
+.rankOther { background: $color-text-disabled; }
+
+.hotKeyword {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  text-align: left;
+}
+
+.hotCount {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.resultList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.resultCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.resultImage {
+  width: 180rpx;
+  height: 180rpx;
+  flex-shrink: 0;
+}
+
+.resultInfo {
+  flex: 1;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.resultName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.resultCommonName {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.resultTypes {
+  display: flex;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.resultPrice {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+  margin-top: $spacing-sm;
+}
+
+.resultPriceLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-weight: normal;
+  margin-right: 4rpx;
+}
+
+.noResult {
+  @include flex-center;
+  flex-direction: column;
+  padding: 120rpx 0;
+}
+
+.noResultIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.3;
+}
+
+.noResultTitle {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.noResultDesc {
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+}
+
+.noContent {
+  @include flex-center;
+  flex-direction: column;
+  padding: 80rpx 0;
+}
+
+.noContentIcon {
+  font-size: 100rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.3;
+}
+
+.noContentText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
