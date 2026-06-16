@@ -1,0 +1,22 @@
+@use '@/styles/variables.scss' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  background-color: $color-tag-bg-urgent;
+  white-space: nowrap;
+}
+
+.tagSmall {
+  padding: 2rpx 8rpx;
+}
+
+.tagText {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  color: $color-urgent;
+  line-height: 1.4;
+}

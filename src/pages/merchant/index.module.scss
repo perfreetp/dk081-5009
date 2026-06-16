@@ -1,0 +1,184 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $page-padding;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.filterBtn {
+  @include button-reset;
+  padding: 8rpx 24rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-page;
+  white-space: nowrap;
+  min-width: 120rpx;
+  height: 60rpx;
+  border: 1rpx solid $color-border;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    border-color: $color-primary;
+  }
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.merchantList {
+  padding: $spacing-md $page-padding;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.merchantCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.merchantTop {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.merchantAvatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+}
+
+.merchantInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.merchantName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.merchantMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: 8rpx;
+}
+
+.merchantRating {
+  font-size: $font-size-sm;
+  color: $color-urgent;
+  font-weight: $font-weight-medium;
+}
+
+.merchantDistance {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.merchantPartCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.merchantCertBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-xs;
+  background: $color-tag-bg-used;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  margin-top: 8rpx;
+}
+
+.merchantTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+}
+
+.merchantTag {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  background: $color-bg-page;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.merchantAddress {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+  @include text-ellipsis-multi(1);
+}
+
+.merchantSource {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.sourceIcon {
+  font-size: $font-size-sm;
+}
+
+.sourceText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.localBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 10rpx;
+  border-radius: $radius-xs;
+  background: $color-tag-bg-remanufactured;
+  font-size: $font-size-xs;
+  color: $color-success;
+  margin-left: $spacing-xs;
+}
+
+.shipBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 10rpx;
+  border-radius: $radius-xs;
+  background: $color-tag-bg-aftermarket;
+  font-size: $font-size-xs;
+  color: $color-aftermarket;
+  margin-left: $spacing-xs;
+}

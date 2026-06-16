@@ -1,0 +1,41 @@
+@use '@/styles/variables.scss' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  white-space: nowrap;
+}
+
+.tagSmall {
+  padding: 2rpx 10rpx;
+}
+
+.tagText {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  line-height: 1.4;
+}
+
+.tagUsed {
+  background-color: $color-tag-bg-used;
+  .tagText {
+    color: $color-used-part;
+  }
+}
+
+.tagRemanufactured {
+  background-color: $color-tag-bg-remanufactured;
+  .tagText {
+    color: $color-remanufactured;
+  }
+}
+
+.tagAftermarket {
+  background-color: $color-tag-bg-aftermarket;
+  .tagText {
+    color: $color-aftermarket;
+  }
+}

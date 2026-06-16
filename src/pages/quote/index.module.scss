@@ -1,0 +1,269 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.tabBar {
+  display: flex;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabItem {
+  flex: 1;
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-md 0;
+  position: relative;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.tabText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.tabTextActive {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.tabUnderline {
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: $color-primary;
+}
+
+.unreadDot {
+  position: absolute;
+  top: 12rpx;
+  right: 30%;
+  min-width: 32rpx;
+  height: 32rpx;
+  border-radius: $radius-round;
+  background: $color-error;
+  @include flex-center;
+  padding: 0 8rpx;
+}
+
+.unreadDotText {
+  font-size: 20rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.sessionList {
+  padding: $spacing-md $page-padding;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.sessionCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.sessionTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.sessionPartName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  max-width: 480rpx;
+}
+
+.sessionBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.badgeActive {
+  background: $color-tag-bg-used;
+  color: $color-primary;
+}
+
+.badgeClosed {
+  background: $color-bg-page;
+  color: $color-text-tertiary;
+}
+
+.sessionCarModel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.sessionTags {
+  display: flex;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.sessionTag {
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.tagBudget {
+  background: $color-tag-bg-aftermarket;
+  color: $color-aftermarket;
+}
+
+.tagUrgent {
+  background: $color-tag-bg-urgent;
+  color: $color-urgent;
+}
+
+.quoteSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.quoteCount {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.quotePrice {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}
+
+.quoteBtn {
+  @include button-reset;
+  background: $color-primary;
+  border-radius: $radius-button;
+  padding: 10rpx 32rpx;
+  height: 60rpx;
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  white-space: nowrap;
+  min-width: 140rpx;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.quoteCard {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+}
+
+.quoteCardTop {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.quoteAvatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+}
+
+.quoteMerchantName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.quotePriceInline {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}
+
+.quoteCardMeta {
+  display: flex;
+  gap: $spacing-md;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.quoteMetaText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.quoteMessage {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  @include text-ellipsis-multi(2);
+}
+
+.compareEntry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  margin-top: $spacing-md;
+  background: $color-tag-bg-used;
+  border-radius: $radius-md;
+}
+
+.compareEntryText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.noQuotes {
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-xl 0;
+}
+
+.noQuotesText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.noQuotesHint {
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+  margin-top: $spacing-xs;
+}

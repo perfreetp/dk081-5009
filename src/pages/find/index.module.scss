@@ -1,0 +1,402 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1A6DFF 0%, #F5F7FA 400rpx);
+  padding-bottom: 120rpx;
+}
+
+.header {
+  padding: $spacing-lg $page-padding $spacing-md;
+}
+
+.carInfoCard {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  backdrop-filter: blur(10px);
+}
+
+.carInfoTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.carInfoEmpty {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.carInfoEmptyText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+}
+
+.carInfoAddBtn {
+  @include button-reset;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1rpx solid rgba(255, 255, 255, 0.4);
+  border-radius: $radius-button;
+  padding: 8rpx 24rpx;
+  height: 56rpx;
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  white-space: nowrap;
+  min-width: 160rpx;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.carInfoFilled {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.carModelText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.carDetailText {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.carChangeBtn {
+  @include button-reset;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-button;
+  padding: 6rpx 20rpx;
+  height: 48rpx;
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  white-space: nowrap;
+  min-width: 100rpx;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  padding: 0 $spacing-lg;
+  height: 80rpx;
+  box-shadow: $shadow-card;
+}
+
+.searchIcon {
+  font-size: 32rpx;
+  margin-right: $spacing-sm;
+  color: $color-text-tertiary;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.searchPlaceholder {
+  font-size: $font-size-md;
+  color: $color-text-disabled;
+}
+
+.quickActions {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md $page-padding;
+}
+
+.actionCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg 0;
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.actionIcon {
+  font-size: 56rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.actionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.actionDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.section {
+  padding: $spacing-md $page-padding 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -$spacing-sm;
+}
+
+.categoryItem {
+  width: calc(25% - #{$spacing-md});
+  margin: 0 $spacing-sm $spacing-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md 0;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.categoryIcon {
+  font-size: 48rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.categoryName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.categoryCount {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.partTypesCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.partTypeRow {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-md 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.partTypeLabel {
+  min-width: 140rpx;
+  margin-right: $spacing-md;
+}
+
+.partTypeContent {
+  flex: 1;
+}
+
+.partTypeTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.partTypeDesc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: $line-height-normal;
+}
+
+.budgetSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.budgetRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.budgetLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.budgetValue {
+  font-size: $font-size-lg;
+  color: $color-price;
+  font-weight: $font-weight-semibold;
+}
+
+.budgetSlider {
+  width: 100%;
+  margin-bottom: $spacing-md;
+}
+
+.urgentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urgentLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.urgentToggle {
+  @include button-reset;
+  width: 96rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+  position: relative;
+  transition: background $transition-base;
+
+  &.active {
+    background: $color-urgent;
+  }
+}
+
+.urgentToggleCircle {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  transition: transform $transition-base;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.15);
+
+  .active & {
+    transform: translateX(40rpx);
+  }
+}
+
+.hotPartsList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.hotPartCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.hotPartImage {
+  width: 200rpx;
+  height: 200rpx;
+  flex-shrink: 0;
+}
+
+.hotPartInfo {
+  flex: 1;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.hotPartName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.hotPartCategory {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.hotPartTypes {
+  display: flex;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.hotPartPriceRow {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+}
+
+.hotPartPriceLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.hotPartPrice {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}

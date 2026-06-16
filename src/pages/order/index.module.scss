@@ -1,0 +1,221 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.tabBar {
+  display: flex;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  overflow-x: auto;
+}
+
+.tabItem {
+  flex-shrink: 0;
+  @include flex-center;
+  padding: $spacing-md $spacing-lg;
+  position: relative;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.tabText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.tabTextActive {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.tabUnderline {
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: $color-primary;
+}
+
+.orderList {
+  padding: $spacing-md $page-padding;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.orderCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.orderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.orderId {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.orderStatus {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.statusPendingPay {
+  color: $color-urgent;
+}
+
+.statusPendingShip {
+  color: $color-primary;
+}
+
+.statusPendingReceive {
+  color: $color-aftermarket;
+}
+
+.statusCompleted {
+  color: $color-success;
+}
+
+.statusDisputed {
+  color: $color-error;
+}
+
+.orderBody {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.orderPartInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.orderPartName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.orderMerchant {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: 8rpx;
+}
+
+.orderInstallDate {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-top: 4rpx;
+}
+
+.orderPriceSection {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.orderPrice {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-price;
+}
+
+.orderDeposit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.orderFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.orderDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.orderActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.actionBtn {
+  @include button-reset;
+  border-radius: $radius-button;
+  padding: 8rpx 24rpx;
+  height: 60rpx;
+  font-size: $font-size-sm;
+  white-space: nowrap;
+  min-width: 120rpx;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.btnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.btnSecondary {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+  border: 1rpx solid $color-border;
+}
+
+.btnWarning {
+  background: $color-error;
+  color: $color-text-white;
+}
+
+.installReminder {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background: $color-tag-bg-aftermarket;
+  border-radius: $radius-md;
+  margin-top: $spacing-sm;
+}
+
+.reminderIcon {
+  font-size: $font-size-md;
+  flex-shrink: 0;
+}
+
+.reminderText {
+  font-size: $font-size-sm;
+  color: $color-aftermarket;
+  line-height: $line-height-normal;
+}
